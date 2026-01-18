@@ -12,8 +12,8 @@ namespace HotelBookingAPI.Models
         public string GuestName { get; set; } = string.Empty;
         [ForeignKey(nameof(Room))]
         public int RoomID { get; set; }
-        public DateTime CheckIn { get; set; }
-        public DateTime CheckOut { get; set; }
+        public DateOnly CheckIn { get; set; }
+        public DateOnly CheckOut { get; set; }
         public int NumberOfGuests { get; set; }
     }
 }

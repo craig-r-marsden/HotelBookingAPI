@@ -15,9 +15,9 @@ namespace HotelBookingAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAvailable(
             [FromRoute(Name = "hotelid")] int hotelId,
-            [FromQuery] DateTime from,
-            [FromQuery] DateTime to,
-            [FromQuery] int people = 1,
+            [FromQuery][Required] DateOnly from,
+            [FromQuery][Required] DateOnly to,
+            [FromQuery][Range(1, 4)] int people = 1,
             CancellationToken cancellationToken = default)
         {
             try
