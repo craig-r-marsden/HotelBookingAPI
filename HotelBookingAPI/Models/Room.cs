@@ -6,10 +6,12 @@ namespace HotelBookingAPI.Models
     public class Room
     {
         public int Id { get; set; }
-        public int Type { get; set; } // 1: Single, 2: Double, 3: Deluxe
-        public int Capacity { get; set; }
+        [ForeignKey(nameof(RoomType))]
+        public int RoomTypeId { get; set; }
+        public RoomType RoomType { get; set; } = null!;
         [ForeignKey(nameof(Hotel))]
         public int HotelId { get; set; }
+        public Hotel Hotel { get; set; } = null!;
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

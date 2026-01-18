@@ -27,10 +27,12 @@ namespace HotelBookingAPI.Services
             if (string.IsNullOrWhiteSpace(request.GuestName))
                 return (null, 400, "GuestName is required");
 
-            var room = await _db.Rooms.FindAsync(new object[] { request.RoomId }, cancellationToken);
+            var room = await _db.Rooms
+                .Include(r => r.RoomType)
+                .FirstOrDefaultAsync(r => r.Id == request.RoomId, cancellationToken);
             if (room == null) return (null, 404, "Room not found");
 
-            if (room.Capacity < request.NumberOfGuests) return (null, 400, "Room capacity is insufficient");
+            if (room.RoomType.Capacity < request.NumberOfGuests) return (null, 400, "Room capacity is insufficient");
 
             var overlap = await _db.Bookings.AnyAsync(b =>
                 b.RoomID == room.Id &&
@@ -74,13 +76,21 @@ namespace HotelBookingAPI.Services
 
             if (booking == null) return null;
 
-            var room = await _db.Rooms.AsNoTracking().FirstOrDefaultAsync(r => r.Id == booking.RoomID, cancellationToken);
+            var room = await _db.Rooms
+                .Include(r => r.RoomType)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.Id == booking.RoomID, cancellationToken);
             HotelDto? hotelDto = null;
             RoomDto? roomDto = null;
 
             if (room != null)
             {
-                roomDto = new RoomDto(room.Id, room.Type, room.Capacity, room.HotelId);
+                roomDto = new RoomDto(room.Id,
+                    room.RoomTypeId,
+                    room.RoomType.Name,
+                    room.RoomType.Capacity,
+                    room.HotelId);
+
                 var hotel = await _db.Hotels.AsNoTracking().FirstOrDefaultAsync(h => h.Id == room.HotelId, cancellationToken);
                 if (hotel != null) hotelDto = new HotelDto(hotel.Id, hotel.Name);
             }

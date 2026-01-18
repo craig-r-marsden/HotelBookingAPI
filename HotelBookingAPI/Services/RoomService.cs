@@ -25,14 +25,16 @@ namespace HotelBookingAPI.Services
             if (!hotelExists) throw new KeyNotFoundException("Hotel not found");
 
             var roomsQuery = _db.Rooms.AsQueryable();
-            roomsQuery = roomsQuery.Where(r => r.HotelId == hotelId && r.Capacity >= people);
+            roomsQuery = roomsQuery
+                .Include(r => r.RoomType)
+                .Where(r => r.HotelId == hotelId && r.RoomType.Capacity >= people);
 
             var available = await roomsQuery
                 .Where(r => !_db.Bookings.Any(b =>
                     b.RoomID == r.Id &&
                     b.CheckIn < to &&
                     b.CheckOut > from))
-                .Select(r => new RoomDto(r.Id, r.Type, r.Capacity, r.HotelId))
+                .Select(r => new RoomDto(r.Id, r.RoomTypeId, r.RoomType.Name, r.RoomType.Capacity, r.HotelId))
                 .ToListAsync(cancellationToken);
 
             return available;
