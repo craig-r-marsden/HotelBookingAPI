@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using HotelBookingAPI.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelBookingAPI.Controllers
 {

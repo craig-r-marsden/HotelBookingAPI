@@ -35,15 +35,45 @@ namespace HotelBookingAPI.Data
 
                 var hotel1 = new Hotel { Name = "Seaside Inn" };
                 var hotel2 = new Hotel { Name = "Mountain Lodge" };
+                var hotel3 = new Hotel { Name = "City Center Hotel" };
+                var hotel4 = new Hotel { Name = "Airport Plaza" };
 
-                _db.Hotels.AddRange(hotel1, hotel2);
+                _db.Hotels.AddRange(hotel1, hotel2, hotel3, hotel4);
                 await _db.SaveChangesAsync(cancellationToken);
 
                 var rooms = new[]
                 {
+                    // Seaside Inn - 6 rooms
+                    new Room { Type = 1, Capacity = 1, HotelId = hotel1.Id },
                     new Room { Type = 1, Capacity = 1, HotelId = hotel1.Id },
                     new Room { Type = 2, Capacity = 2, HotelId = hotel1.Id },
-                    new Room { Type = 3, Capacity = 4, HotelId = hotel2.Id }
+                    new Room { Type = 2, Capacity = 2, HotelId = hotel1.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel1.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel1.Id },
+                    
+                    // Mountain Lodge - 6 rooms
+                    new Room { Type = 1, Capacity = 1, HotelId = hotel2.Id },
+                    new Room { Type = 1, Capacity = 1, HotelId = hotel2.Id },
+                    new Room { Type = 2, Capacity = 2, HotelId = hotel2.Id },
+                    new Room { Type = 2, Capacity = 2, HotelId = hotel2.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel2.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel2.Id },
+                    
+                    // City Center Hotel - 6 rooms
+                    new Room { Type = 1, Capacity = 1, HotelId = hotel3.Id },
+                    new Room { Type = 1, Capacity = 1, HotelId = hotel3.Id },
+                    new Room { Type = 2, Capacity = 2, HotelId = hotel3.Id },
+                    new Room { Type = 2, Capacity = 2, HotelId = hotel3.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel3.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel3.Id },
+                    
+                    // Airport Plaza - 6 rooms
+                    new Room { Type = 1, Capacity = 1, HotelId = hotel4.Id },
+                    new Room { Type = 1, Capacity = 1, HotelId = hotel4.Id },
+                    new Room { Type = 2, Capacity = 2, HotelId = hotel4.Id },
+                    new Room { Type = 2, Capacity = 2, HotelId = hotel4.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel4.Id },
+                    new Room { Type = 3, Capacity = 4, HotelId = hotel4.Id }
                 };
                 _db.Rooms.AddRange(rooms);
                 await _db.SaveChangesAsync(cancellationToken);
