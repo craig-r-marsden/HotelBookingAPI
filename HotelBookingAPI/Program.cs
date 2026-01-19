@@ -22,9 +22,19 @@ builder.Services.AddScoped<IHotelService, HotelService>();
 
 var app = builder.Build();
 
-// Apply migrations automatically if in Development
 if (app.Environment.IsDevelopment())
 {
+    // Maps the OpenAPI spec document, view at /openapi/v1.json
+    app.MapOpenApi();
+
+    // Add Swagger UI for testing endpoints
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/openapi/v1.json", "HotelBooking API v1");
+        c.RoutePrefix = "swagger"; // UI available at /swagger or /swagger/index.html
+    });
+
+    // Apply migrations automatically if in Development
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
@@ -36,16 +46,6 @@ var listeningUrls = app.Urls.Any()
     ? string.Join(',', app.Urls)
     : (builder.Configuration["ASPNETCORE_URLS"] ?? "no urls configured");
 app.Logger.LogInformation("Listening on: {urls}", listeningUrls);
-
-// Maps the OpenAPI spec document, view at /openapi/v1.json
-app.MapOpenApi();
-
-// Add Swagger UI for testing endpoints
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/openapi/v1.json", "HotelBooking API v1");
-    c.RoutePrefix = "swagger"; // UI available at /swagger or /swagger/index.html
-});
 
 app.UseHttpsRedirection();
 
